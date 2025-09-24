@@ -1,0 +1,160 @@
+import os
+import sys
+import time
+import threading
+import pygame
+import random
+import pyttsx3
+
+
+if os.name == 'nt':
+    import msvcrt
+else:
+    import tty
+    import termios
+
+# Constantes para teclas
+if os.name == 'nt':
+    KEY_UP = b'H'
+    KEY_DOWN = b'P'
+    KEY_ENTER = b'\r'
+else:
+    KEY_UP = b'\x1b[A'
+    KEY_DOWN = b'\x1b[B'
+    KEY_ENTER = b'\r'
+
+# Inicializar pygame para audio
+pygame.mixer.init()
+
+def play_sound(audio_file):
+    if audio_file == 0: audio_file_name = "sonido.mp3"
+    elif audio_file == 1: audio_file_name = "enter.mp3"
+    elif audio_file == 2: audio_file_name = "teclado.mp3"
+    try:
+        pygame.mixer.music.load(audio_file_name)
+        pygame.mixer.music.play()
+        # Esperar a que termine la reproducción
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+    except Exception as e:
+        pass
+def get_key():
+    if os.name == 'nt':
+        key = msvcrt.getch()
+        if key == b'\xe0':
+            key = msvcrt.getch()
+        return key
+    else:
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            ch = sys.stdin.read(1).encode()
+            if ch == b'\x1b':
+                ch += sys.stdin.read(2).encode()
+            return ch
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def print_opcciones(options, selected_index):
+    clear_screen()
+    print("=== Voz de Eliza ===\n")
+    for i, option in enumerate(options):
+        if i == selected_index:
+            print(f"    {option} <")
+        else:
+            print(f"    {option}")
+    print("\nUsa las flechas ↑/↓ y Enter para seleccionar")
+
+def Menu_Voz():
+    options = ["Voz Activada", "Voz Desactivada"]
+    selected_index = 0
+    last_index = 0  # Track del último índice seleccionado
+    
+    while True:
+        print_opcciones(options, selected_index)
+        
+        # Reproducir sonido solo si hubo cambio de selección
+        if selected_index != last_index:
+            threading.Thread(target=play_sound, args=(0,)).start() # Sonido.mp3
+            last_index = selected_index
+            
+        key = get_key()
+        
+        if key == KEY_UP and selected_index > 0: # Subir
+            selected_index -= 1
+        elif key == KEY_DOWN and selected_index < len(options) - 1: # Bajar
+            selected_index += 1
+        elif key == KEY_ENTER: # Enter
+            threading.Thread(target=play_sound, args=(1,)).start() # Enter.mp3
+           
+            mensajes_postseleccion = [
+                "Has activado la voz",
+                "La voz está ahora desactivada"
+            ]
+            time.sleep(0.3)
+            clear_screen()
+
+            # Mostrar mensaje de selección con puntos suspensivos
+            print(f"{mensajes_postseleccion[selected_index]} ", end='', flush=True)
+            
+            print("", end='', flush=True) 
+
+            for _ in range(3):
+                time.sleep(0.4)
+                print(".", end='', flush=True)
+
+            
+            time.sleep(0.5)
+            clear_screen()
+            break
+    
+    return selected_index
+
+def nombre_usuario():
+    clear_screen()
+    print("=== Nombre de Usuario ===\n")
+    print("Por favor, ingresa tu nombre: ", end='', flush=True)
+    nombre = ""
+    while True:
+        tecla = msvcrt.getch()  # Captura una tecla sin esperar Enter
+        
+        if tecla == b'\r':  # Enter para terminar
+            print()
+            if nombre == "":
+                nombre = "User"
+            break
+        elif tecla == b'\x08':  # Backspace
+            if len(nombre) > 0:
+                nombre = nombre[:-1]
+                print("\b \b", end="", flush=True)  # Borra el último carácter en pantalla
+        else:
+            try:
+                char = tecla.decode("utf-8")
+                nombre += char
+                print(char, end="", flush=True)
+                # Sonido cada vez que escribe una letra
+                threading.Thread(target=play_sound, args=(2,)).start()  # Teclado.mp3 
+                
+            except UnicodeDecodeError:
+                pass
+        
+       
+                
+    return nombre
+
+      
+
+if __name__ == "__main__":
+   resultado = Menu_Voz()
+   # Valor de Menu_Voz():
+   # Activado = 0
+   # Desactivado = 1
+   print(f"Resultado de la selección: {resultado}")
+   nombre = nombre_usuario()
+   print(f"Nombre del usuario: {nombre}")
+   
+   os.system(f"python eliza.py {nombre} {resultado}")
