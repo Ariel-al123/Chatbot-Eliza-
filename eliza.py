@@ -1,30 +1,57 @@
 import random
-import streamlit as st
 import time
 import sys
 import pyttsx3
 import os
 
+def Hacer_Carrito(objetos):
+    archivo = open("carrito.txt", "w")
+
+    for elemento in objetos:
+        archivo.write(elemento + "\n")
+
+
+def Leer_Carrito():
+    archivo = open("carrito.txt", "r")
+
+    contenido = archivo.read()
+    print(contenido)
+
+def Menu():
+    ancho = os.get_terminal_size().columns    
+  
+    mensaje = "Adios    |   Salir de Programa   "
+    print(mensaje.rjust(ancho))
+    
+    mensaje = "Caro     |   Opcción de Objetar  "
+    print(mensaje.rjust(ancho))
+
+    mensaje = "Colocar  |   Añadir al Carrito   "
+    print(mensaje.rjust(ancho))
+
+    mensaje = "Carrito  |   Observar Carrito    "
+    print(mensaje.rjust(ancho))
+
+    mensaje = "Comprar  |   Comprar Carrito     "
+    print(mensaje.rjust(ancho))
+
 respuestas_por_palabra_clave = {
     ("hola", "buenas", "hey", "qué tal"): [
-        "Hola. Soy Eliza. Por favor, dime tu problema.",
-        "Hola, ¿qué te trae por aquí?",
-        "Hola, ¿cómo te sientes hoy?",
+        "Hola. Soy Eliza. Por favor, ¿En que puedo ayudate?.",
+        "Hola, ¿En que puedo ayudate?",
         "Un gusto saludarte, hablame sobre de ti."
     ],
 
     ("adiós", "hasta luego", "chao", "nos vemos"): [
         "Adiós. Gracias por hablar conmigo.",
-        "Hasta luego, que tengas un buen día.",
+        "Hasta luego, esperto que estes satisfecho.",
         "Fue un placer conversar contigo. Adiós.",
-        "Espero que podamos hablar de nuevo pronto."
+        "Gracias vuelve pronto."
     ],
 
     ("nombre", "me llamo", "soy"): [
         "Gracias por decirme tu nombre.",
-        "Es un placer conocerte.",
-        "¿Qué significa tu nombre?",
-        "¿Siempre te ha gustado tu nombre?"
+        "Es un placer conocerte."
     ],
     
     ("necesito", "quiero", "me gustaría"): [
@@ -35,17 +62,12 @@ respuestas_por_palabra_clave = {
     ],
   
     ("siento", "estoy", "me siento"): [
-        "¿Por qué te sientes así?",
         "Lamento oír que te sientes así. Cuéntame más.",
-        "Describe con más detalle ese sentimiento.",
         "¿Qué crees que provoca ese estado en ti?"
     ],
 
     ("recuerdo", "memoria"): [
         "¿Qué más recuerdas sobre eso?",
-        "¿Cómo te hace sentir ese recuerdo?",
-        "Los recuerdos son la clave del pasado.",
-        "A veces los recuerdos nos enseñan más de lo que pensamos."
     ],
 
     ("madre", "mamá", "padre", "papá", "hermano", "hermana", "familia"): [
@@ -56,17 +78,8 @@ respuestas_por_palabra_clave = {
     ],
 
     ("eres", "sos", "tú"): [
-        "¿Qué te hace pensar eso de mí?",
         "¿Realmente importa lo que soy? Hablemos de ti.",
-        "Yo no soy lo importante aquí, tú lo eres.",
-        "Parece que quieres saber más de mí, pero pero no importa, me gusta leer sobre ti."
-    ],
-
-    ("por qué", "porque", "razón"): [
-        "Recuerda que no son lo hechos que nos afectan, sino la interpretacion sobre ellos son los que nos afectan.",
-        "¿Por qué crees que es importante?",
-        "A veces la razón no es tan clara como pensamos.",
-        "En retrospectiva es facil ver los errores, pero en el pasado no tanto."
+        "Yo no soy lo importante aquí, en que puedo ayudarte?.",
     ],
 
     ("feliz", "alegre", "contento"): [
@@ -75,13 +88,7 @@ respuestas_por_palabra_clave = {
         "¿Cómo podrías mantener ese sentimiento?",
         "La felicidad es algo valioso, cuéntame más."
     ],
-
-    ("triste", "deprimido", "solo", "cansado"): [
-        "Lamento que te sientas así. ¿Quieres hablar más de eso?",
-        "Estar triste puede ser difícil. ¿Qué lo causa?",
-        "A veces compartir lo que sientes ayuda. ¿Quieres decirmelo?",
-        "¿Cómo podrías cuidar de ti mismo en este momento?"
-    ]
+   
 }
 
 respuestas_genericas = [
@@ -112,17 +119,38 @@ cambio_pronombres = {
     
 }
 
+def Menu():
+    ancho = os.get_terminal_size().columns  
+    mensaje = "Adios    |   Salir de Programa   "
+    print(mensaje.rjust(ancho))
+    
+    mensaje = "Caro     |   Opcción de Objetar  "
+    print(mensaje.rjust(ancho))
+
+    mensaje = "Colocar  |   Añadir al Carrito   "
+    print(mensaje.rjust(ancho))
+
+    mensaje = "Carrito  |   Observar Carrito    "
+    print(mensaje.rjust(ancho))
+
+    mensaje = "Comprar  |   Comprar Carrito     "
+    print(mensaje.rjust(ancho))
+
 def Imprimir(texto, voz):
     engine = pyttsx3.init()
     engine.setProperty('rate', 200)  # Velocidad del habla
     engine.setProperty('volume', 1)  # Volumen (0.0 a 1.0)
     engine.getProperty('voices')
-
+    
+    Menu()
     print("Eliza: ", end='', flush=True)
     if voz == 0:
         engine.say(texto)
     
     # Mostrar el texto con efecto "máquina de escribir" en la misma línea
+
+    #print("")
+
     for ch in texto:
         # Imprime cada carácter sin salto de línea y fuerza el vaciado del buffer
         sys.stdout.write(ch)
@@ -142,9 +170,7 @@ def generar_respuesta(entrada_usuario):
                 "recuerdo", "memoria",
                 "madre", "mamá", "padre", "papá", "hermano", "hermana", "familia",
                 "eres", "sos", "tú",
-                "por qué", "porque", "razón",
                 "feliz", "alegre", "contento",
-                "triste", "deprimido", "solo", "cansado"
                 ]
     # Convertimos la entrada a una lista de palabras en minúsculas.
     # Esto es un ejemplo de manipulación de cadenas (string) y creación de
@@ -181,6 +207,7 @@ def generar_respuesta(entrada_usuario):
 def eliza_chat(name_user, voz):
 # Imprimimos un mensaje de bienvenida una sola vez.
     os.system('cls' if os.name == 'nt' else 'clear')
+    
     mensaje = "Hola. Soy Eliza. Por favor habla conmigo (Escribe 'adiós' para salir"
     
     Imprimir(mensaje, voz)
@@ -212,6 +239,6 @@ def eliza_chat(name_user, voz):
 # sys.argv[2] voz 0 == activada
 #             voz 1 == desactivada
 # Yo se, puede llegar a ser algo confuso
-print(sys.argv[2])
+
 eliza_chat(sys.argv[1], int(sys.argv[2]))
     
