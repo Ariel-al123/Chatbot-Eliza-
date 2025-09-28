@@ -7,6 +7,9 @@ def Menu():
     mensaje = "Adios    |   Salir de Programa   "
     print(mensaje.rjust(ancho))
     
+    mensaje = "Catalogo |   Observar Catalogo   "
+    print(mensaje.rjust(ancho))
+    
     mensaje = "Caro     |   Opcción de Objetar  "
     print(mensaje.rjust(ancho))
 
@@ -19,3 +22,4 @@ def Menu():
     mensaje = "Comprar  |   Comprar Carrito     "
     print(mensaje.rjust(ancho))
 
+Menu()

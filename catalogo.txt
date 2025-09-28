@@ -1,0 +1,54 @@
+📘 Catálogo de Laptops
+
+Laptop1
+💵 Precio: $15,000.00
+⚙️ Características:
+    16GB RAM
+    RTX 3060
+    SSD 512GB
+    Intel i7 11ª Gen
+🏷️ Descuento máximo: 15%
+
+Laptop2
+💵 Precio: $12,000.00
+⚙️ Características
+    8GB RAM
+    Intel i5 12ª Gen
+    SSD 256GB
+🏷️ Descuento máximo: 10%
+
+Laptop3
+💵 Precio: $25,000.00
+⚙️ Características:
+    32GB RAM
+    RTX 4070
+    SSD 1TB
+    Intel i9 13ª Gen
+🏷️ Descuento máximo: 20%
+
+💻 Catálogo de PCs de Escritorio
+
+PC1
+💵 Precio: $8,000.00
+⚙️ Características:
+    8GB RAM
+    Ryzen 5 5600G
+    SSD 480GB
+🏷️ Descuento máximo: 8%
+
+PC2
+💵 Precio: $20,000.00
+⚙️ Características:
+    16GB RAM
+    RTX 3060 Ti
+    SSD 1TB
+    Ryzen 7 5800X
+🏷️ Descuento máximo: 18%
+
+PC3
+💵 Precio: $35,000.00
+⚙️ Características:
+    64GB RAM
+    RTX 4090
+    SSD 2TB NVMe
+🏷️ Descuento máximo: 25%

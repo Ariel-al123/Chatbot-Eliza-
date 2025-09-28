@@ -42,6 +42,95 @@ catalogo_productos_pc = {
     }
 }
 
+catalogo_productos_pc_todo = {
+    "laptops": [
+        {
+            "nombre": "laptop1",
+            "precio": 15000.00,
+            "caracteristicas": [
+                "16GB RAM", "RTX 3060", "SSD 512GB",
+                "Intel i7 11ª Gen", "144Hz"
+            ],
+            "palabras_clave": (
+                "laptop", "gaming", "juegos", "notebook",
+                "pc", "portátil", "ordenador", "3060",
+                "RTX", "intel", "gamer"
+            ),
+            "descuento_maximo": 0.15
+        },
+        {
+            "nombre": "laptop2",
+            "precio": 12000.00,
+            "caracteristicas": [
+                "8GB RAM", "Intel i5 12ª Gen",
+                "SSD 256GB", "Pantalla 14'' FHD", "Ligera"
+            ],
+            "palabras_clave": (
+                "laptop", "ultrabook", "ligera",
+                "notebook", "trabajo", "portátil", "oficina"
+            ),
+            "descuento_maximo": 0.10
+        },
+        {
+            "nombre": "laptop3",
+            "precio": 25000.00,
+            "caracteristicas": [
+                "32GB RAM", "RTX 4070", "SSD 1TB",
+                "Intel i9 13ª Gen", "Pantalla 16'' QHD 240Hz"
+            ],
+            "palabras_clave": (
+                "laptop", "gaming", "profesional", "nvidia",
+                "4070", "intel", "creadores", "render", "edición"
+            ),
+            "descuento_maximo": 0.20
+        }
+    ],
+
+    "pc_escritorio": [
+        {
+            "nombre": "pc1",
+            "precio": 8000.00,
+            "caracteristicas": [
+                "8GB RAM", "Ryzen 5 5600G",
+                "SSD 480GB", "Gráficos integrados Vega"
+            ],
+            "palabras_clave": (
+                "pc", "escritorio", "ordenador",
+                "oficina", "básico", "amd", "trabajo"
+            ),
+            "descuento_maximo": 0.08
+        },
+        {
+            "nombre": "pc2",
+            "precio": 20000.00,
+            "caracteristicas": [
+                "16GB RAM", "RTX 3060 Ti",
+                "SSD 1TB", "Ryzen 7 5800X"
+            ],
+            "palabras_clave": (
+                "pc", "gaming", "nvidia", "ryzen",
+                "juegos", "gamer", "desempeño"
+            ),
+            "descuento_maximo": 0.18
+        },
+        {
+            "nombre": "pc3",
+            "precio": 35000.00,
+            "caracteristicas": [
+                "64GB RAM", "RTX 4090",
+                "SSD 2TB NVMe", "Intel Xeon",
+                "Placa base workstation"
+            ],
+            "palabras_clave": (
+                "pc", "workstation", "profesional", "render",
+                "edición", "servidor", "intel", "4090", "nvidia"
+            ),
+            "descuento_maximo": 0.25
+        }
+    ]
+}
+
+
 
 catalogo_productos_celulares = {
     "celular": {

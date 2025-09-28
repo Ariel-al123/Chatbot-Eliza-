@@ -3,6 +3,9 @@ import time
 import sys
 import pyttsx3
 import os
+# crear archivo de catalogo
+# crea funciones donde se guarden las carcteristicas tecnicas en un archivo
+# otro en donde se guarde la recomendacion anterior 
 
 def Hacer_Carrito(objetos):
     archivo = open("carrito.txt", "w")
@@ -17,10 +20,20 @@ def Leer_Carrito():
     contenido = archivo.read()
     print(contenido)
 
+
+def Catalogo():
+    archivo = open("carrito.txt", "r")
+
+    contenido = archivo.read()
+    print(contenido)
+
 def Menu():
     ancho = os.get_terminal_size().columns    
   
     mensaje = "Adios    |   Salir de Programa   "
+    print(mensaje.rjust(ancho))
+    
+    mensaje = "Catalogo |   Observar Catalogo   "
     print(mensaje.rjust(ancho))
     
     mensaje = "Caro     |   Opcción de Objetar  "
@@ -42,24 +55,11 @@ respuestas_por_palabra_clave = {
         "Un gusto saludarte, hablame sobre de ti."
     ],
 
-    ("adiós", "hasta luego", "chao", "nos vemos"): [
-        "Adiós. Gracias por hablar conmigo.",
-        "Hasta luego, esperto que estes satisfecho.",
-        "Fue un placer conversar contigo. Adiós.",
-        "Gracias vuelve pronto."
-    ],
-
     ("nombre", "me llamo", "soy"): [
         "Gracias por decirme tu nombre.",
         "Es un placer conocerte."
     ],
     
-    ("necesito", "quiero", "me gustaría"): [
-        "¿Por qué lo necesitas?",
-        "¿Qué pasaría si no lo tuvieras?",
-        "Entiendo que lo desees.",
-        "¿Crees que obtenerlo te hará sentir mejor?"
-    ],
   
     ("siento", "estoy", "me siento"): [
         "Lamento oír que te sientes así. Cuéntame más.",
@@ -91,18 +91,104 @@ respuestas_por_palabra_clave = {
    
 }
 
+
+catalogo_productos_pc_todo = {
+    "laptops": [
+        {
+            "nombre": "laptop1",
+            "precio": 15000.00,
+            "caracteristicas": [
+                "16GB RAM", "RTX 3060", "SSD 512GB",
+                "Intel i7 11ª Gen", "144Hz"
+            ],
+            "palabras_clave": (
+                "laptop", "gaming", "juegos", "notebook",
+                "pc", "portátil", "ordenador", "3060",
+                "RTX", "intel", "gamer"
+            ),
+            "descuento_maximo": 0.15
+        },
+        {
+            "nombre": "laptop2",
+            "precio": 12000.00,
+            "caracteristicas": [
+                "8GB RAM", "Intel i5 12ª Gen",
+                "SSD 256GB", "Pantalla 14'' FHD", "Ligera"
+            ],
+            "palabras_clave": (
+                "laptop", "ultrabook", "ligera",
+                "notebook", "trabajo", "portátil", "oficina"
+            ),
+            "descuento_maximo": 0.10
+        },
+        {
+            "nombre": "laptop3",
+            "precio": 25000.00,
+            "caracteristicas": [
+                "32GB RAM", "RTX 4070", "SSD 1TB",
+                "Intel i9 13ª Gen", "Pantalla 16'' QHD 240Hz"
+            ],
+            "palabras_clave": (
+                "laptop", "gaming", "profesional", "nvidia",
+                "4070", "intel", "creadores", "render", "edición"
+            ),
+            "descuento_maximo": 0.20
+        }
+    ],
+
+    "pc_escritorio": [
+        {
+            "nombre": "pc1",
+            "precio": 8000.00,
+            "caracteristicas": [
+                "8GB RAM", "Ryzen 5 5600G",
+                "SSD 480GB", "Gráficos integrados Vega"
+            ],
+            "palabras_clave": (
+                "pc", "escritorio", "ordenador",
+                "oficina", "básico", "amd", "trabajo"
+            ),
+            "descuento_maximo": 0.08
+        },
+        {
+            "nombre": "pc2",
+            "precio": 20000.00,
+            "caracteristicas": [
+                "16GB RAM", "RTX 3060 Ti",
+                "SSD 1TB", "Ryzen 7 5800X"
+            ],
+            "palabras_clave": (
+                "pc", "gaming", "nvidia", "ryzen",
+                "juegos", "gamer", "desempeño"
+            ),
+            "descuento_maximo": 0.18
+        },
+        {
+            "nombre": "pc3",
+            "precio": 35000.00,
+            "caracteristicas": [
+                "64GB RAM", "RTX 4090",
+                "SSD 2TB NVMe", "Intel Xeon",
+                "Placa base workstation"
+            ],
+            "palabras_clave": (
+                "pc", "workstation", "profesional", "render",
+                "edición", "servidor", "intel", "4090", "nvidia"
+            ),
+            "descuento_maximo": 0.25
+        }
+    ]
+}
+
+
 respuestas_genericas = [
     "Ya veo.",
     "Por favor, continúa.",
     "Cuentame mas.",
     "No te entendí bien, ¿Puedes darme más detalles?",
-    "¿Qué es lo que piensas?",
     "Entiendo cómo te puedes sentir.",
     "Continúa, te escucho...",
-    "Eso es interesante, dime más.",
-    "Eres interesante, cuentame más.",
-    "¿Por qué piensas así?",
-    "Cuéntame más sobre eso."
+    
 ]
 
 cambio_pronombres = {
@@ -119,22 +205,6 @@ cambio_pronombres = {
     
 }
 
-def Menu():
-    ancho = os.get_terminal_size().columns  
-    mensaje = "Adios    |   Salir de Programa   "
-    print(mensaje.rjust(ancho))
-    
-    mensaje = "Caro     |   Opcción de Objetar  "
-    print(mensaje.rjust(ancho))
-
-    mensaje = "Colocar  |   Añadir al Carrito   "
-    print(mensaje.rjust(ancho))
-
-    mensaje = "Carrito  |   Observar Carrito    "
-    print(mensaje.rjust(ancho))
-
-    mensaje = "Comprar  |   Comprar Carrito     "
-    print(mensaje.rjust(ancho))
 
 def Imprimir(texto, voz):
     engine = pyttsx3.init()
@@ -161,45 +231,75 @@ def Imprimir(texto, voz):
    
     engine.runAndWait()
 
+
 def generar_respuesta(entrada_usuario):
+
+    #Re hacer toda la funcion
     palabras_clave = ["hola", "buenas", "hey", "qué tal",
-                "adiós", "adios", "hasta luego", "chao", "nos vemos",
                 "nombre", "me llamo", "soy",
-                "necesito", "quiero", "me gustaría",
                 "siento", "estoy", "me siento",
                 "recuerdo", "memoria",
                 "madre", "mamá", "padre", "papá", "hermano", "hermana", "familia",
                 "eres", "sos", "tú",
                 "feliz", "alegre", "contento",
-                ]
-    # Convertimos la entrada a una lista de palabras en minúsculas.
-    # Esto es un ejemplo de manipulación de cadenas (string) y creación de
-    #listas (list)
+    ]
+    acciones_claves = {
+        "adios", "adiós",
+        "catalogo", "catálogo"
+        "caró", "caro",
+        "colocar", "carrito",
+        "comprar"
+    }
+
+    # Convertimos la entrada a una lista de palabras en minúsculas y las separamos.
     palabras = entrada_usuario.lower().split()
     
     # Usamos un bucle 'for' para iterar sobre nuestro diccionario de reglas.
     for grupo_claves, respuestas in respuestas_por_palabra_clave.items():
         # Usamos otro bucle 'for' anidado para revisar cada palabra clave en el grupo.
         for clave in grupo_claves:
-        # El operador 'in' es una forma simple y poderosa de verificar pertenencia.
-
-         if clave in palabras:
+        
+        # Detección de acciones claves
+         if clave not in acciones_claves:
             # Si encontramos una palabra clave, seleccionamos una respuesta estandar.
-            # El operador '%' (módulo) nos ayuda a tomar una decisión simple.
-            if clave in palabras_clave and len(palabras) > 2:
-            # Reflejamos la frase del usuario, cambiando los pronombres.
-                frase_reflejada = []
-                for palabras in palabras:
-                    # Usamos .get() para buscar en el diccionario de pronombres
-                    #si la palabra no esta, simplemente la usamos tal cual.
-                    frase_reflejada.append(cambio_pronombres.get(palabras, palabras))
-                # Unimos la lista de palabras para formar una nueva oración y la devolvemos.
-                return "¿Dices que " + " ".join(frase_reflejada) + "?"
+            # Detección de palabras claves
+            if clave in palabras:
+                if clave in palabras_clave and len(palabras) > 2:
+                # Reflejamos la frase del usuario, cambiando los pronombres.
+                    frase_reflejada = []
+                    for palabras in palabras:
+                        # Usamos .get() para buscar en el diccionario de pronombres
+                        #si la palabra no esta, simplemente la usamos tal cual.
+                        frase_reflejada.append(cambio_pronombres.get(palabras, palabras))
+                    # Unimos la lista de palabras para formar una nueva oración y la devolvemos.
+                    return "¿Dices que " + " ".join(frase_reflejada) + "?"
+                else:
+                    # Si no, simplemente elegimos una respuesta al azar de la lista
+                    return random.choice(respuestas)
+                    # Si el bucle 'for' termina sin encontrar ninguna palabra clave,
+                    # devolveremos una respueesta generica
+        else:
+            if clave == "adios" or "adiós":
+                mensaje = "Adiós, espero que estes satisfecho."
+                return mensaje
+            elif clave == "catalogo" or "catálogo":
+                Catalogo()
+            elif clave == "caró" or "caro":
+                mensaje = ""
+            elif clave == "colocar":
+                Hacer_Carrito()
+                mensaje = ""
+            elif clave == "carrito":
+                Leer_Carrito()
+                mensaje = ""
+            elif clave == "comprar":
+                mensaje = ""
             else:
-                # Si no, simplemente elegimos una respuesta al azar de la lista
-                return random.choice(respuestas)
-                # Si el bucle 'for' termina sin encontrar ninguna palabra clave,
-                # devolveremos una respueesta generica
+                mensaje = "Lo siento, no entiendo la accion que tratas de hacer\nPorfavor vuelve a intentar"
+
+            #Imprimir(mensaje)
+        
+
 
     return random.choice(respuestas_genericas)
     
@@ -241,4 +341,3 @@ def eliza_chat(name_user, voz):
 # Yo se, puede llegar a ser algo confuso
 
 eliza_chat(sys.argv[1], int(sys.argv[2]))
-    
