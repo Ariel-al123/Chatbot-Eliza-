@@ -8,24 +8,22 @@ import os
 # otro en donde se guarde la recomendacion anterior 
 
 def Hacer_Carrito(objetos):
-    archivo = open("carrito.txt", "w")
-
-    for elemento in objetos:
-        archivo.write(elemento + "\n")
+    with open("carrito.txt", "w", encoding="utf-8") as archivo:
+        for elemento in objetos:
+            archivo.write(elemento + "\n")
 
 
 def Leer_Carrito():
-    archivo = open("carrito.txt", "r")
-
-    contenido = archivo.read()
-    print(contenido)
+    with open("carrito.txt", "r", encoding="utf-8") as archivo:
+        contenido = archivo.read()
+        print(contenido)
 
 
 def Catalogo():
-    archivo = open("carrito.txt", "r")
+    with open("catalogo.txt", "r", encoding="utf-8") as archivo:
+        contenido = archivo.read()
+        print(contenido)
 
-    contenido = archivo.read()
-    print(contenido)
 
 def Menu():
     ancho = os.get_terminal_size().columns    
@@ -236,12 +234,12 @@ def generar_respuesta(entrada_usuario):
 
     #Re hacer toda la funcion
     palabras_clave = ["hola", "buenas", "hey", "qué tal",
-                "nombre", "me llamo", "soy",
-                "siento", "estoy", "me siento",
-                "recuerdo", "memoria",
-                "madre", "mamá", "padre", "papá", "hermano", "hermana", "familia",
-                "eres", "sos", "tú",
-                "feliz", "alegre", "contento",
+                        "nombre", "me llamo", "soy",
+                        "siento", "estoy", "me siento",
+                        "recuerdo", "memoria",
+                        "madre", "mamá", "padre", "papá", "hermano", "hermana", "familia",
+                        "eres", "sos", "tú",
+                        "feliz", "alegre", "contento",
     ]
     acciones_claves = {
         "adios", "adiós",
@@ -254,55 +252,38 @@ def generar_respuesta(entrada_usuario):
     # Convertimos la entrada a una lista de palabras en minúsculas y las separamos.
     palabras = entrada_usuario.lower().split()
     
-    # Usamos un bucle 'for' para iterar sobre nuestro diccionario de reglas.
+    #for grupo_claves, respuestas in acciones_claves.items():
+    for palabra in palabras:
+        if palabra in acciones_claves:
+            if palabra in ("adios", "adiós"):
+                return "Adiós, espero que estés satisfecho."
+            elif palabra in ("catalogo", "catálogo"):
+                Catalogo()
+                return ""
+            elif palabra in ("caró", "caro"):
+                return "La opción 'caro' no está implementada. Por favor, intenta otra acción."
+            elif palabra == "colocar":
+                Hacer_Carrito([])
+                return ""
+            elif palabra == "carrito":
+                Leer_Carrito()
+                return ""
+            elif palabra == "comprar":
+                return "Simulación de compra realizada."
+            
+
+    # 🔹 Si no es acción clave → buscamos en respuestas normales
     for grupo_claves, respuestas in respuestas_por_palabra_clave.items():
-        # Usamos otro bucle 'for' anidado para revisar cada palabra clave en el grupo.
         for clave in grupo_claves:
-        
-        # Detección de acciones claves
-         if clave not in acciones_claves:
-            # Si encontramos una palabra clave, seleccionamos una respuesta estandar.
-            # Detección de palabras claves
             if clave in palabras:
                 if clave in palabras_clave and len(palabras) > 2:
-                # Reflejamos la frase del usuario, cambiando los pronombres.
-                    frase_reflejada = []
-                    for palabras in palabras:
-                        # Usamos .get() para buscar en el diccionario de pronombres
-                        #si la palabra no esta, simplemente la usamos tal cual.
-                        frase_reflejada.append(cambio_pronombres.get(palabras, palabras))
-                    # Unimos la lista de palabras para formar una nueva oración y la devolvemos.
+                    frase_reflejada = [
+                        cambio_pronombres.get(p, p) for p in palabras
+                    ]
                     return "¿Dices que " + " ".join(frase_reflejada) + "?"
                 else:
-                    # Si no, simplemente elegimos una respuesta al azar de la lista
                     return random.choice(respuestas)
-                    # Si el bucle 'for' termina sin encontrar ninguna palabra clave,
-                    # devolveremos una respueesta generica
-        else:
-            if clave == "adios" or "adiós":
-                mensaje = "Adiós, espero que estes satisfecho."
-                return mensaje
-            elif clave == "catalogo" or "catálogo":
-                Catalogo()
-            elif clave == "caró" or "caro":
-                mensaje = ""
-            elif clave == "colocar":
-                Hacer_Carrito()
-                mensaje = ""
-            elif clave == "carrito":
-                Leer_Carrito()
-                mensaje = ""
-            elif clave == "comprar":
-                mensaje = ""
-            else:
-                mensaje = "Lo siento, no entiendo la accion que tratas de hacer\nPorfavor vuelve a intentar"
 
-            #Imprimir(mensaje)
-        
-
-
-    return random.choice(respuestas_genericas)
-    
 
 def eliza_chat(name_user, voz):
 # Imprimimos un mensaje de bienvenida una sola vez.
@@ -318,11 +299,7 @@ def eliza_chat(name_user, voz):
         entrada_usuario = input(f"{name_user}: ")
         #Usamos un condicional 'if' para comprobar si el usuario quiere
         #El operador 'or' nos permite verificar múltiples condiciones.
-        if entrada_usuario.lower() == "adiós" or entrada_usuario.lower() == "adios" or entrada_usuario.lower() == "salir":
-            mensaje = "Adiós. Gracias por hablar conmigo."
-            Imprimir(mensaje, voz)
-            #La declaración 'break' rompe el bucle 'while' y termina el programa.
-            break
+        
             #Si no salimos, llamamos a nuestra función principal para obtener una respuesta.
     
         respuesta = generar_respuesta(entrada_usuario)
