@@ -82,14 +82,9 @@ def Menu_Voz():
             clear.clear_screen()
 
             # Mostrar mensaje de selección con puntos suspensivos
-            print(f"{mensajes_postseleccion[selected_index]} ", end='', flush=True)
+            #print(f"{mensajes_postseleccion[selected_index]} ", end='', flush=True)
             
-            print("", end='', flush=True) 
-
-            for _ in range(3):
-                time.sleep(0.4)
-                print(".", end='', flush=True)
-
+            
             
             time.sleep(0.5)
             clear.clear_screen()

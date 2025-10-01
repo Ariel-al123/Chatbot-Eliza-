@@ -1,8 +1,20 @@
 |✔️| Mensaje Inicial
+|✔️| Catalogo
+
 
 | | Sistema de recomendacion
-
-
-
 | | Objetar
-| | Catalogo
+
+hacer que suncione
+ Hacer_Carrito
+
+
+ Obtener saldo/dinero al principio en el main
+
+
+Recomendacion:
+Obtener palabras claves como intel, nvidia etc..
+Preguntar si desea una pc con esos requisitos
+Buscar en catalogo buscando en saltos de lineas
+Obtener 2 productos y dar el mas caro y el otr guardarlo en objetar
+    En recomendacion dar el segundo producto mas barato para que te puedan objetar

@@ -7,24 +7,6 @@ import os
 # crea funciones donde se guarden las carcteristicas tecnicas en un archivo
 # otro en donde se guarde la recomendacion anterior 
 
-def Hacer_Carrito(objetos):
-    with open("carrito.txt", "w", encoding="utf-8") as archivo:
-        for elemento in objetos:
-            archivo.write(elemento + "\n")
-
-
-def Leer_Carrito():
-    with open("carrito.txt", "r", encoding="utf-8") as archivo:
-        contenido = archivo.read()
-        print(contenido)
-
-
-def Catalogo():
-    with open("catalogo.txt", "r", encoding="utf-8") as archivo:
-        contenido = archivo.read()
-        print(contenido)
-
-
 def Menu():
     ancho = os.get_terminal_size().columns    
   
@@ -45,6 +27,98 @@ def Menu():
 
     mensaje = "Comprar  |   Comprar Carrito     "
     print(mensaje.rjust(ancho))
+
+
+def Imprimir(texto, voz):
+    engine = pyttsx3.init()
+    engine.setProperty('rate', 200)  # Velocidad del habla
+    engine.setProperty('volume', 1)  # Volumen (0.0 a 1.0)
+    engine.getProperty('voices')
+    
+    Menu()
+    print("Eliza: ", end='', flush=True)
+    if voz == 0:
+        engine.say(texto)
+    
+    # Mostrar el texto con efecto "máquina de escribir" en la misma línea
+
+    #print("")
+
+    for ch in texto:
+        # Imprime cada carácter sin salto de línea y fuerza el vaciado del buffer
+        sys.stdout.write(ch)
+        sys.stdout.flush()
+        time.sleep(0.001)
+    print()  # Salto de línea al final
+    
+   
+    engine.runAndWait()
+
+
+def Hacer_Carrito(objetos):
+    #Leer catalogo y obtener el objeto
+        #Pc
+        # 2 de saltos
+        # for (0;2;++)
+        # 1 de nombre 
+        # 1 de precio
+        # 6 de descuento
+        # Total de saltos de pc 29
+
+        #Laptop
+        # 2 de saltos
+        # for (0;2;++)
+        # 1 de nombre 
+        # 1 de precio
+        # 6 de descuento
+
+    # Escribir Caracteristicas del producto
+        # Nombre del procucto
+        # Precio
+        # Descuento
+    with open("carrito.txt", "a", encoding="utf-8") as archivo:
+        for elemento in objetos:
+            archivo.write(elemento + "\n")
+
+
+def Leer_Carrito():
+    with open("carrito.txt", "r", encoding="utf-8") as archivo:
+        contenido = archivo.read()
+    return contenido
+
+
+def Catalogo():
+    with open("catalogo.txt", "r", encoding="utf-8") as archivo:
+        contenido = archivo.read()
+    return contenido
+
+def Eliminar_Carrito():
+    # Mostrar carrito y escribir el nombre del producto a eliminar
+    # Cada 1 lineas es un producto
+        # Nombre
+        # Precio
+        # Descuento
+        # Espacio
+
+    return
+
+def Comprar():
+    # Obtener saldo/dinero al principio en el main
+    # Mostrar carrito
+    # Obtener precios, descuentos
+    # Mostrar descuento cada uno y el subtotal
+    # Mostrar la cantidad total a pagar
+     # Si es negativo el la cantidad preguntar si desea eliminar productos del carrito
+     # y retornar a Eliminar_Carrito()
+        # Preguntar de esta forma (S/n)
+     # sino sales de la funcion
+    # Preguntar si desea confirmar la compra (S/n)
+    # Restar el total del carrito al saldo/dinero
+    # Mostrar el saldo/dinero restante
+
+    return
+
+
 
 respuestas_por_palabra_clave = {
     ("hola", "buenas", "hey", "qué tal"): [
@@ -204,31 +278,6 @@ cambio_pronombres = {
 }
 
 
-def Imprimir(texto, voz):
-    engine = pyttsx3.init()
-    engine.setProperty('rate', 200)  # Velocidad del habla
-    engine.setProperty('volume', 1)  # Volumen (0.0 a 1.0)
-    engine.getProperty('voices')
-    
-    Menu()
-    print("Eliza: ", end='', flush=True)
-    if voz == 0:
-        engine.say(texto)
-    
-    # Mostrar el texto con efecto "máquina de escribir" en la misma línea
-
-    #print("")
-
-    for ch in texto:
-        # Imprime cada carácter sin salto de línea y fuerza el vaciado del buffer
-        sys.stdout.write(ch)
-        sys.stdout.flush()
-        time.sleep(0.05)
-    print()  # Salto de línea al final
-    
-   
-    engine.runAndWait()
-
 
 def generar_respuesta(entrada_usuario):
 
@@ -258,16 +307,19 @@ def generar_respuesta(entrada_usuario):
             if palabra in ("adios", "adiós"):
                 return "Adiós, espero que estés satisfecho."
             elif palabra in ("catalogo", "catálogo"):
-                Catalogo()
-                return ""
+                mensaje = Catalogo()
+                return mensaje
             elif palabra in ("caró", "caro"):
                 return "La opción 'caro' no está implementada. Por favor, intenta otra acción."
             elif palabra == "colocar":
-                Hacer_Carrito([])
-                return ""
+                objetos = entrada_usuario.lower().split()
+                for objetos in palabras:
+                    if objetos in "pc" or objetos in "laptop":
+                         Hacer_Carrito(objetos)
+                return "Producto en el carrito listo ✔️"
             elif palabra == "carrito":
-                Leer_Carrito()
-                return ""
+                a = Leer_Carrito()
+                return a
             elif palabra == "comprar":
                 return "Simulación de compra realizada."
             
