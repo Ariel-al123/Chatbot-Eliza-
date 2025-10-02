@@ -4,7 +4,7 @@ import sys
 import pyttsx3
 import os
 
-# crear archivo de catalogo
+
 # crea funciones donde se guarden las carcteristicas tecnicas en un archivo
 # otro en donde se guarde la recomendacion anterior 
 
@@ -145,7 +145,7 @@ def Eliminar_Carrito():
 
     return
 
-def Comprar():
+def Comprar(saldo):
     # Obtener saldo/dinero al principio en el main
     # Mostrar carrito
     # Obtener precios, descuentos
@@ -207,19 +207,17 @@ respuestas_por_palabra_clave = {
 }
 
 
-catalogo_productos_pc_todo = {
+catalogo_productos_todo = {
     "laptops": [
         {
             "nombre": "laptop1",
             "precio": 15000.00,
             "caracteristicas": [
                 "16GB RAM", "RTX 3060", "SSD 512GB",
-                "Intel i7 11ª Gen", "144Hz"
+                "Intel i7 11ª Gen"
             ],
             "palabras_clave": (
-                "laptop", "gaming", "juegos", "notebook",
-                "pc", "portátil", "ordenador", "3060",
-                "RTX", "intel", "gamer"
+                "3060", "rtx", "intel", "ssd", "16", "ram", "i7"
             ),
             "descuento_maximo": 0.15
         },
@@ -227,12 +225,10 @@ catalogo_productos_pc_todo = {
             "nombre": "laptop2",
             "precio": 12000.00,
             "caracteristicas": [
-                "8GB RAM", "Intel i5 12ª Gen",
-                "SSD 256GB", "Pantalla 14'' FHD", "Ligera"
+                "8GB RAM", "Intel i5 12ª Gen", "SSD 256GB"
             ],
             "palabras_clave": (
-                "laptop", "ultrabook", "ligera",
-                "notebook", "trabajo", "portátil", "oficina"
+               "8gb", "intel", "i5", "256", "ssd"
             ),
             "descuento_maximo": 0.10
         },
@@ -241,27 +237,25 @@ catalogo_productos_pc_todo = {
             "precio": 25000.00,
             "caracteristicas": [
                 "32GB RAM", "RTX 4070", "SSD 1TB",
-                "Intel i9 13ª Gen", "Pantalla 16'' QHD 240Hz"
+                "Intel i9 13ª Gen"
             ],
             "palabras_clave": (
-                "laptop", "gaming", "profesional", "nvidia",
-                "4070", "intel", "creadores", "render", "edición"
+                "nvidia", "4070", "intel", "i9", "ssd", "1tb", "ram", "32"
             ),
             "descuento_maximo": 0.20
         }
     ],
 
-    "pc_escritorio": [
+    "pc": [
         {
             "nombre": "pc1",
             "precio": 8000.00,
             "caracteristicas": [
                 "8GB RAM", "Ryzen 5 5600G",
-                "SSD 480GB", "Gráficos integrados Vega"
+                "SSD 480GB"
             ],
             "palabras_clave": (
-                "pc", "escritorio", "ordenador",
-                "oficina", "básico", "amd", "trabajo"
+               "ryzen", "amd", "480", "ssd", "5600", "ram", "8"
             ),
             "descuento_maximo": 0.08
         },
@@ -273,8 +267,7 @@ catalogo_productos_pc_todo = {
                 "SSD 1TB", "Ryzen 7 5800X"
             ],
             "palabras_clave": (
-                "pc", "gaming", "nvidia", "ryzen",
-                "juegos", "gamer", "desempeño"
+                "nvidia", "ryzen", "3060", "16", "ram", "ti", "ssd", "1tb", "rtx"
             ),
             "descuento_maximo": 0.18
         },
@@ -283,12 +276,10 @@ catalogo_productos_pc_todo = {
             "precio": 35000.00,
             "caracteristicas": [
                 "64GB RAM", "RTX 4090",
-                "SSD 2TB NVMe", "Intel Xeon",
-                "Placa base workstation"
+                "SSD 2TB NVMe", "Intel i9 14 gen"
             ],
             "palabras_clave": (
-                "pc", "workstation", "profesional", "render",
-                "edición", "servidor", "intel", "4090", "nvidia"
+               "intel", "4090", "nvidia", "ssd", "2tb", "ram", "64", "rtx", "pc"
             ),
             "descuento_maximo": 0.25
         }
@@ -322,7 +313,7 @@ cambio_pronombres = {
 
 
 
-def generar_respuesta(entrada_usuario):
+def generar_respuesta(entrada_usuario, saldo):
 
     #Re hacer toda la funcion
     palabras_clave = ["hola", "buenas", "hey", "qué tal",
@@ -349,6 +340,7 @@ def generar_respuesta(entrada_usuario):
         palabra = palabras[i]
         if palabra in acciones_claves:
             if palabra in ("adios", "adiós"):
+                sys.exit()
                 return "Adiós, espero que estés satisfecho."
             elif palabra in ("catalogo", "catálogo"):
                 mensaje = Catalogo()
@@ -367,6 +359,7 @@ def generar_respuesta(entrada_usuario):
                 a = Leer_Carrito()
                 return a
             elif palabra == "comprar":
+                Comprar(saldo)
                 return "Simulación de compra realizada."
             
 
@@ -383,7 +376,7 @@ def generar_respuesta(entrada_usuario):
                     return random.choice(respuestas)
 
 
-def eliza_chat(name_user, voz):
+def eliza_chat(name_user, voz, saldo):
 # Imprimimos un mensaje de bienvenida una sola vez.
     os.system('cls' if os.name == 'nt' else 'clear')
     
@@ -415,4 +408,4 @@ def eliza_chat(name_user, voz):
 #             voz 1 == desactivada
 # Yo se, puede llegar a ser algo confuso
 
-eliza_chat(sys.argv[1], int(sys.argv[2]))
+eliza_chat(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))

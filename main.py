@@ -122,15 +122,30 @@ def nombre_usuario():
                 
     return nombre
 
+def saldo():
+    clear.clear_screen()
+    print("=== Saldo Inicial ===\n")
+    saldo = None
+    saldo = input(int("Por favor, ingresa tu saldo inicial (número): "))
+
+    if saldo is None or saldo <= 0:
+        saldo = 20000
+
+    return saldo
       
 
 if __name__ == "__main__":
-   resultado = Menu_Voz()
    # Valor de Menu_Voz():
    # Activado = 0
    # Desactivado = 1
+   
+   resultado = Menu_Voz()
    print(f"Resultado de la selección: {resultado}")
+   
    nombre = nombre_usuario()
    print(f"Nombre del usuario: {nombre}")
+
+   Saldo = saldo()
+   print(f"Saldo inicial: {saldo}")
    
-   os.system(f"python eliza.py {nombre} {resultado}")
+   os.system(f"python eliza.py {nombre} {resultado} {Saldo}")

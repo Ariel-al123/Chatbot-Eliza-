@@ -7,6 +7,18 @@
 | | Objetar
 | | Carrito de Compras 
 
+
+Acciones de Menu
+|✔️| Adios
+|✔️| Catalogo
+| | Caro
+|✔️| Colocar
+|✔️| Carrito
+| | Comprar
+
+
+
+
 * Hacer_Carrito(objetos) ahorito solo funciona con una opccion pero sí quitas
         el break
         dejas que mande mas objetos en el argumento
