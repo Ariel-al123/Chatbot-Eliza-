@@ -3,6 +3,7 @@ import time
 import sys
 import pyttsx3
 import os
+
 # crear archivo de catalogo
 # crea funciones donde se guarden las carcteristicas tecnicas en un archivo
 # otro en donde se guarde la recomendacion anterior 
@@ -56,30 +57,72 @@ def Imprimir(texto, voz):
 
 
 def Hacer_Carrito(objetos):
-    #Leer catalogo y obtener el objeto
-        #Pc
-        # 2 de saltos
-        # for (0;2;++)
-        # 1 de nombre 
-        # 1 de precio
-        # 6 de descuento
-        # Total de saltos de pc 29
+    
+    ProductoEncontrado = False
+    PrecioEncontrado = False
+    DescuentoEncontrado = False
+    lineas = []  # Almacenar todas las líneas del archivo
 
-        #Laptop
-        # 2 de saltos
-        # for (0;2;++)
-        # 1 de nombre 
-        # 1 de precio
-        # 6 de descuento
+    # Leer todas las líneas del archivo
+    with open("catalogo.txt", "r", encoding="utf-8") as archivo:
+        lineas = archivo.readlines()
 
-    # Escribir Caracteristicas del producto
-        # Nombre del procucto
-        # Precio
-        # Descuento
+    # Recorrer las líneas con un índice para controlar los saltos
+    for i in range(len(lineas)):
+        # Convertir la línea actual a minúsculas y dividirla en palabras
+        linea_actual = lineas[i].strip().lower().split()
+
+        # Buscar el objeto en la línea actual
+        if objetos in linea_actual:
+            
+            Producto = lineas[i].strip()
+            ProductoEncontrado = True
+            # Buscar el precio en la siguiente línea (1 salto)
+            if i + 1 < len(lineas):
+                siguiente_linea = lineas[i + 1].strip()
+                if "$" in siguiente_linea:
+                    
+                    Precio = siguiente_linea.split("$", 1)[1].strip()
+                    PrecioEncontrado = True
+                    # Buscar el descuento 6 líneas después
+                    if i + 7 < len(lineas):  # 1 para precio + 6 para descuento
+                        linea_descuento = lineas[i + 7].strip()
+                        if "%" in linea_descuento:
+                            # Extraer el número antes del %
+                            Descuento = linea_descuento.split("%")[0].strip().split()[-1]
+                            DescuentoEncontrado = True
+                            break  # Salir del bucle tras encontrar todo
+                        else:
+                            print("No se encontró el descuento en la línea esperada.")
+                    else:
+                        print("No hay suficientes líneas para encontrar el descuento.")
+                else:
+                    print("No se encontró el precio en la línea esperada.")
+            else:
+                print("No hay suficientes líneas para encontrar el precio.")
+    
+   
+    if not ProductoEncontrado:
+        print(f"El objeto '{objetos}' no se encontró en el catálogo.")
+    elif not PrecioEncontrado:
+        print("No se encontró el precio del objeto.")
+    elif not DescuentoEncontrado:
+        print("No se encontró el descuento del objeto.")
+    
+    # Retornar los datos encontrados (si los hay)
+    if ProductoEncontrado and PrecioEncontrado and DescuentoEncontrado:
+        return f"Nombre : {Producto},\nPrecio : {Precio},\nDescuento : {Descuento}%\nProducto en el carrito listo ✔️"
+        
+   
+
+    #Guardar informacion en carrito.txt
     with open("carrito.txt", "a", encoding="utf-8") as archivo:
-        for elemento in objetos:
-            archivo.write(elemento + "\n")
-
+        archivo.write(f"Producto: {Producto}\n")
+        archivo.write(f"Precio: ${Precio}\n")
+        archivo.write(f"Descuento: {Descuento}%\n\n")
+    
+    
+    
 
 def Leer_Carrito():
     with open("carrito.txt", "r", encoding="utf-8") as archivo:
@@ -302,7 +345,8 @@ def generar_respuesta(entrada_usuario):
     palabras = entrada_usuario.lower().split()
     
     #for grupo_claves, respuestas in acciones_claves.items():
-    for palabra in palabras:
+    for i in range(len(palabras)):
+        palabra = palabras[i]
         if palabra in acciones_claves:
             if palabra in ("adios", "adiós"):
                 return "Adiós, espero que estés satisfecho."
@@ -312,11 +356,13 @@ def generar_respuesta(entrada_usuario):
             elif palabra in ("caró", "caro"):
                 return "La opción 'caro' no está implementada. Por favor, intenta otra acción."
             elif palabra == "colocar":
-                objetos = entrada_usuario.lower().split()
-                for objetos in palabras:
-                    if objetos in "pc" or objetos in "laptop":
-                         Hacer_Carrito(objetos)
-                return "Producto en el carrito listo ✔️"
+                producto = palabras[i + 1]  # la siguiente palabra
+                print(f"Producto a buscar: {producto}")
+                if producto.startswith("pc") or producto.startswith("laptop"):
+                        a = Hacer_Carrito(producto)
+                        return a
+                else:
+                    return "Producto no encontrado en el catálogo ❌"
             elif palabra == "carrito":
                 a = Leer_Carrito()
                 return a

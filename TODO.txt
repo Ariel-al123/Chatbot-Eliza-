@@ -1,20 +1,15 @@
 |✔️| Mensaje Inicial
 |✔️| Catalogo
+|✔️| Hacer_Carrito
 
 
 | | Sistema de recomendacion
 | | Objetar
+| | Carrito de Compras 
 
-hacer que suncione
- Hacer_Carrito
+* Hacer_Carrito(objetos) ahorito solo funciona con una opccion pero sí quitas
+        el break
+        dejas que mande mas objetos en el argumento
+    en teoria debeeria funcionar.
 
-
- Obtener saldo/dinero al principio en el main
-
-
-Recomendacion:
-Obtener palabras claves como intel, nvidia etc..
-Preguntar si desea una pc con esos requisitos
-Buscar en catalogo buscando en saltos de lineas
-Obtener 2 productos y dar el mas caro y el otr guardarlo en objetar
-    En recomendacion dar el segundo producto mas barato para que te puedan objetar
+Obtener saldo/dinero al principio en el main
