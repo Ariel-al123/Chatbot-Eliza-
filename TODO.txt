@@ -1,9 +1,8 @@
 |✔️| Mensaje Inicial
 |✔️| Catalogo
 |✔️| Hacer_Carrito
+|✔️| Sistema de recomendacion
 
-
-| | Sistema de recomendacion
 | | Objetar
 | | Carrito de Compras 
 

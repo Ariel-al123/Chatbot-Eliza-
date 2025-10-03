@@ -356,7 +356,7 @@ def generar_respuesta(entrada_usuario, saldo):
 
     # Convertimos la entrada a una lista de palabras en minúsculas y las separamos.
     palabras = entrada_usuario.lower().split()
-    
+    retorno_valor = False
     # 🔹 Acciones Claves
     for i in range(len(palabras)):
         palabra = palabras[i]
@@ -365,22 +365,28 @@ def generar_respuesta(entrada_usuario, saldo):
                 sys.exit()
                 return "Adiós, espero que estés satisfecho."
             elif palabra in ("catalogo", "catálogo"):
+                retorno_valor = True
                 mensaje = Catalogo()
                 return mensaje
             elif palabra in ("caró", "caro"):
+                retorno_valor = True
                 return "La opción 'caro' no está implementada. Por favor, intenta otra acción."
             elif palabra == "colocar":
+                retorno_valor = True
                 producto = palabras[i + 1]  # la siguiente palabra
                 print(f"Producto a buscar: {producto}")
                 if producto.startswith("pc") or producto.startswith("laptop"):
                         a = Hacer_Carrito(producto)
                         return a
                 else:
+                    retorno_valor = True
                     return "Producto no encontrado en el catálogo ❌"
             elif palabra == "carrito":
+                retorno_valor = True
                 a = Leer_Carrito()
                 return a
             elif palabra == "comprar":
+                retorno_valor = True
                 Comprar(saldo)
                 return "Simulación de compra realizada."
             
@@ -413,29 +419,37 @@ def generar_respuesta(entrada_usuario, saldo):
                     productos_recomendados.sort(key=lambda x: x["precio"], reverse=True)
                     
                     if productos_recomendados:
+                        retorno_valor = True
                         respuesta = "Basado en tus requisitos, te recomiendo:\n"
                         for prod in productos_recomendados:
                             respuesta += f"- {prod['nombre']} (${prod['precio']}) con características: {', '.join(prod['caracteristicas'])}\n"
                         return respuesta
                     else:
-                        return "No encontré productos que coincidan exactamente con tus requisitos."
+                        retorno_valor = True
+                        respuesta = "No encontré productos que coincidan exactamente con tus requisitos."
+                        return respuesta
                 else:
-                    return "Por favor, especifica si buscas una laptop o una PC."
+                    retorno_valor = True
+                    respuesta = "Por favor, especifica si buscas una laptop o una PC."
+                    return respuesta
             else:
-                return "Por favor, proporciona más detalles sobre tus requisitos."
-            
+                retorno_valor = True
+                respuesta = "No encontré productos que coincidan exactamente con tus requisitos."
+                return respuesta
+    
 
     # 🔹 Si no es acción clave → buscamos en respuestas normales
-    for grupo_claves, respuestas in respuestas_por_palabra_clave.items():
-        for clave in grupo_claves:
-            if clave in palabras:
-                if clave in palabras_clave and len(palabras) > 2:
-                    frase_reflejada = [
-                        cambio_pronombres.get(p, p) for p in palabras
-                    ]
-                    return "¿Dices que " + " ".join(frase_reflejada) + "?"
-                else:
-                    return random.choice(respuestas)
+    if not retorno_valor or respuesta == None:
+        for grupo_claves, respuestas in respuestas_por_palabra_clave.items():
+            for clave in grupo_claves:
+                if clave in palabras:
+                    if clave in palabras_clave and len(palabras) > 2:
+                        frase_reflejada = []
+                        for palabras in palabras:  # Error: la variable 'palabras' está siendo sobrescrita
+                          frase_reflejada.append(cambio_pronombres.get(palabras, palabras))
+                        return "¿Dices que " + " ".join(frase_reflejada) + "?"
+                    else:
+                        return random.choice(respuestas)
 
 
 def eliza_chat(name_user, voz, saldo):
