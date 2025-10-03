@@ -15,6 +15,5 @@ Acciones de Menu
 |✔️| Carrito
 | | Comprar
 
-
 # Eliminar_Carrito
-# Comprar
+

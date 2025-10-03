@@ -105,9 +105,6 @@ def Hacer_Carrito(objetos):
         print("No se encontró el descuento del objeto.")
     
     # Retornar los datos encontrados (si los hay)
-    if ProductoEncontrado and PrecioEncontrado and DescuentoEncontrado:
-        return f"Nombre : {Producto},\nPrecio : {Precio},\nDescuento : {Descuento}%\nProducto en el carrito listo ✔️"
-        
    
 
     #Guardar informacion en carrito.txt
@@ -116,6 +113,9 @@ def Hacer_Carrito(objetos):
         archivo.write(f"Precio: ${Precio}\n")
         archivo.write(f"Descuento: {Descuento}%\n\n")
     
+    if ProductoEncontrado and PrecioEncontrado and DescuentoEncontrado:
+        return f"Nombre : {Producto},\nPrecio : {Precio},\nDescuento : {Descuento}%\nProducto en el carrito listo ✔️"
+        
     
     
 
@@ -138,23 +138,150 @@ def Eliminar_Carrito():
         # Descuento
         # Espacio
 
+    Imprimir(Leer_Carrito(), 1)
+    producto_eliminar = input("Escribe el nombre del producto a eliminar: ")
+    producto_eliminar.lower()
+    
+    with open("carrito.txt", "r", encoding="utf-8") as archivo:
+        lineas = archivo.readlines().lower()
+        if producto_eliminar in lineas:
+            # Eliminar las líneas correspondientes al producto
+            with open("carrito.txt", "w", encoding="utf-8") as archivo:
+                for linea in lineas:
+                    if producto_eliminar not in linea:
+                        archivo.write(linea)
+            print(f"Producto '{producto_eliminar}' eliminado del carrito.")
+
+
     return
 
 def Comprar(saldo):
-    # Obtener saldo/dinero al principio en el main
-    # Mostrar carrito
-    # Obtener precios, descuentos
-    # Mostrar descuento cada uno y el subtotal
-    # Mostrar la cantidad total a pagar
-     # Si es negativo el la cantidad preguntar si desea eliminar productos del carrito
-     # y retornar a Eliminar_Carrito()
-        # Preguntar de esta forma (S/n)
-     # sino sales de la funcion
-    # Preguntar si desea confirmar la compra (S/n)
-    # Restar el total del carrito al saldo/dinero
-    # Mostrar el saldo/dinero restante
+    # Obtener saldo/dinero al principio en el main ✔️
+    # Mostrar carrito ✔️
+    # Obtener precios, descuentos ✔️
+    # Mostrar descuento cada uno y el subtotal ---------------------------------------------------> Puede que estar listo
+    # Mostrar la cantidad total a pagar ----------------------------------------------------------> Puede que estar listo
+     # Si es negativo el la cantidad preguntar si desea eliminar productos del carrito ✔️
+     # y retornar a Eliminar_Carrito() ✔️
+        # Preguntar de esta forma (S/n) ✔️
+     # sino sales de la funcion ✔️
+    # Preguntar si desea confirmar la compra (S/n) ✔️
+    # Restar el total del carrito al saldo/dinero ✔️
+    # Mostrar el saldo/dinero restante  ✔️
 
-    return
+    total_a_pagar = 0.0
+    productos = []
+    
+    # Leer el carrito
+    try:
+        with open("carrito.txt", "r", encoding="utf-8") as archivo:
+            lineas = archivo.readlines()
+            if not lineas:
+                return "El carrito está vacío."
+            
+            print("Resumen de compra:")
+            print("-" * 40)
+            i = 0
+            while i < len(lineas):
+                linea = lineas[i].strip().lower()
+                if not linea:  # Saltar líneas vacías
+                    i += 1
+                    continue
+                if linea.startswith("producto:"):
+                    nombre_producto = linea.split(":", 1)[1].strip()
+                    precio = 0.0
+                    descuento = 0.0
+                    # Buscar precio
+                    if i + 1 < len(lineas) and lineas[i + 1].strip().lower().startswith("precio:"):
+                        precio_str = lineas[i + 1].strip().split(":", 1)[1].replace("$", "").replace(",", "").strip()
+                        try:
+                            precio = float(precio_str)
+                        except ValueError:
+                            print(f"Error: Precio inválido para '{nombre_producto}'.")
+                            i += 4  # Saltar bloque completo
+                            continue
+                    else:
+                        print(f"Error: No se encontró precio para '{nombre_producto}'.")
+                        i += 4
+                        continue
+                    # Buscar descuento
+                    if i + 2 < len(lineas) and lineas[i + 2].strip().lower().startswith("descuento:"):
+                        descuento_str = lineas[i + 2].strip().split(":", 1)[1].replace("%", "").strip()
+                        try:
+                            descuento = float(descuento_str)
+                        except ValueError:
+                            print(f"Error: Descuento inválido para '{nombre_producto}'.")
+                            i += 4
+                            continue
+                    else:
+                        print(f"Error: No se encontró descuento para '{nombre_producto}'.")
+                        i += 4
+                        continue
+                    # Calcular precio con descuento
+                    precio_con_descuento = precio * (1 - descuento / 100)
+                    total_a_pagar += precio_con_descuento
+                    productos.append({
+                        "nombre": nombre_producto,
+                        "precio": precio,
+                        "descuento": descuento,
+                        "precio_con_descuento": precio_con_descuento
+                    })
+                    i += 4  # Saltar al siguiente producto (3 líneas + 1 vacía)
+                else:
+                    i += 1  # Avanzar si la línea no es un producto
+    except FileNotFoundError:
+        return "Error: El archivo del carrito no existe."
+    except Exception as e:
+        return f"Error al leer el carrito: {str(e)}"
+
+    # Mostrar resumen de productos
+    if productos:
+        for producto in productos:
+            print(f"Producto: {producto['nombre']}")
+            print(f"  Precio: ${producto['precio']:.2f}")
+            print(f"  Descuento: {producto['descuento']:.0f}%")
+            print(f"  Precio con descuento: ${producto['precio_con_descuento']:.2f}")
+            print("-" * 40)
+        print(f"Total a pagar: ${total_a_pagar:.2f}")
+    else:
+        return "No se encontraron productos válidos en el carrito."
+
+    # Verificar si el saldo es suficiente
+    if total_a_pagar > saldo:
+        print(f"Saldo insuficiente: Necesitas ${total_a_pagar:.2f}, pero tienes ${saldo:.2f}.")
+        respuesta = input("¿Desea eliminar productos del carrito? (S/n): ").strip().lower()
+        if respuesta == 's' or respuesta == '':
+            try:
+                Eliminar_Carrito()
+                return ""
+            except NameError:
+                return "Error: La función Eliminar_Carrito no está definida."
+            except Exception as e:
+                return f"Error al eliminar productos: {str(e)}"
+        else:
+            return "Compra cancelada."
+    
+    # Confirmar la compra
+    respuesta = input("¿Desea confirmar la compra? (S/n): ").strip().lower()
+    if respuesta == 's' or respuesta == '':
+        nuevo_saldo = saldo - total_a_pagar
+        print(f"Compra confirmada.")
+        print(f"Total pagado: ${total_a_pagar:.2f}")
+        print(f"Saldo restante: ${nuevo_saldo:.2f}")
+        # Actualizar el saldo (esto asume que el saldo se maneja en el programa principal)
+        # Vaciar el carrito
+        try:
+            with open("carrito.txt", "w", encoding="utf-8") as archivo:
+                archivo.write("")  # Vaciar el archivo
+            return ""
+        except Exception as e:
+            return f"Error al vaciar el carrito: {str(e)}"
+    else:
+        return "Compra cancelada."
+
+                        
+
+    
 
 
 
@@ -422,14 +549,14 @@ def generar_respuesta(entrada_usuario, saldo):
     for i in range(len(palabras)):
         palabra = palabras[i]
         if palabra in acciones_claves:
-            if palabra in ("adios", "adiós"):
+            if palabra in ("adios", "adiós"):                           # Adios
                 sys.exit()
                 return "Adiós, espero que estés satisfecho."
-            elif palabra in ("catalogo", "catálogo"):
+            elif palabra in ("catalogo", "catálogo"):                   # Catalogo
                 retorno_valor = True
                 mensaje = Catalogo()
                 return mensaje
-            elif palabra in ("caró", "caro", "cará", "cara"):
+            elif palabra in ("caró", "caro", "cará", "cara"):           # Caro
                 retorno_valor = True
                 # Leer la línea 4 (índice 3) del archivo productos_recomendados.txt
                 with open("productos_recomendados.txt", "r", encoding="utf-8") as archivo:
@@ -463,10 +590,7 @@ def generar_respuesta(entrada_usuario, saldo):
                     archivo.writelines(nuevas_lineas)
                 return respuesta
 
-                
-
-                return "La opción 'caro' no está implementada. Por favor, intenta otra acción."
-            elif palabra == "colocar":
+            elif palabra == "colocar":                                  # Colocar
                 retorno_valor = True
                 producto = palabras[i + 1]  # la siguiente palabra
                 print(f"Producto a buscar: {producto}")
@@ -476,14 +600,14 @@ def generar_respuesta(entrada_usuario, saldo):
                 else:
                     retorno_valor = True
                     return "Producto no encontrado en el catálogo ❌"
-            elif palabra == "carrito":
+            elif palabra == "carrito":                                  # Carrito
                 retorno_valor = True
                 a = Leer_Carrito()
                 return a
-            elif palabra == "comprar":
+            elif palabra == "comprar":                                  # Comprar
                 retorno_valor = True
                 Comprar(saldo)
-                return "Simulación de compra realizada."
+                return "Compra realizada."
             
 
 
