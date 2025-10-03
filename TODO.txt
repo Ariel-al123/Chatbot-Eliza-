@@ -2,22 +2,18 @@
 |✔️| Catalogo
 |✔️| Hacer_Carrito
 |✔️| Sistema de recomendacion
+|✔️| Objetar
 
-| | Objetar
 | | Carrito de Compras 
 
 
 Acciones de Menu
 |✔️| Adios
 |✔️| Catalogo
-| | Caro
+|✔️| Caro
 |✔️| Colocar
 |✔️| Carrito
 | | Comprar
-
-# Objetar
-    # Obtener valores de productos_recomendados.txt y dar la otra opccion
-        al recibir las palabras claves
 
 
 # Eliminar_Carrito

@@ -429,8 +429,42 @@ def generar_respuesta(entrada_usuario, saldo):
                 retorno_valor = True
                 mensaje = Catalogo()
                 return mensaje
-            elif palabra in ("caró", "caro"):
+            elif palabra in ("caró", "caro", "cará", "cara"):
                 retorno_valor = True
+                # Leer la línea 4 (índice 3) del archivo productos_recomendados.txt
+                with open("productos_recomendados.txt", "r", encoding="utf-8") as archivo:
+                    lineas = archivo.readlines()
+                if len(lineas) < 4:
+                    return "No hay más productos recomendados."
+                nombre_linea = lineas[3].strip()
+                # Buscar el nombre en el catálogo
+                producto_encontrado = None
+                tipo_encontrado = None
+                for tipo in ["laptops", "pc"]:
+                    for producto in catalogo_productos_todo[tipo]:
+                        if producto["nombre"] == nombre_linea:
+                            producto_encontrado = producto
+                            tipo_encontrado = tipo
+                            break
+                    if producto_encontrado:
+                        break
+                if producto_encontrado:
+                    respuesta = f"Nombre: {producto_encontrado['nombre']}\n"
+                    respuesta += f"Precio: ${producto_encontrado['precio']}\n"
+                    respuesta += "Características: " + ", ".join(producto_encontrado["caracteristicas"]) + "\n"
+                else:
+                    respuesta = f"No se encontró el producto '{nombre_linea}' en el catálogo."
+                # Eliminar los primeros 5 renglones del archivo productos_recomendados.txt
+                if len(lineas) > 5:
+                    nuevas_lineas = lineas[5:]
+                else:
+                    nuevas_lineas = []
+                with open("productos_recomendados.txt", "w", encoding="utf-8") as archivo:
+                    archivo.writelines(nuevas_lineas)
+                return respuesta
+
+                
+
                 return "La opción 'caro' no está implementada. Por favor, intenta otra acción."
             elif palabra == "colocar":
                 retorno_valor = True
