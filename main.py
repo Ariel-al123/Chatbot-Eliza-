@@ -126,7 +126,10 @@ def saldo():
     clear.clear_screen()
     print("=== Saldo Inicial ===\n")
     saldo = None
-    saldo = input(int("Por favor, ingresa tu saldo inicial (número): "))
+    try:
+        saldo = int(input("Por favor, ingresa tu saldo inicial (número): "))
+    except ValueError:
+        saldo = 20000
 
     if saldo is None or saldo <= 0:
         saldo = 20000
@@ -140,12 +143,16 @@ if __name__ == "__main__":
    # Desactivado = 1
    
    resultado = Menu_Voz()
-   print(f"Resultado de la selección: {resultado}")
-   
    nombre = nombre_usuario()
-   print(f"Nombre del usuario: {nombre}")
-
    Saldo = saldo()
-   print(f"Saldo inicial: {saldo}")
+    
+   clear.clear_screen()
+
+   print("Configuración completada. Iniciando Eliza...\n")
+   print(f"Resultado de la selección: {resultado}")
+   print(f"Nombre del usuario: {nombre}")
+   print(f"Saldo inicial: {Saldo}")
+
+   time.sleep(1)
    
    os.system(f"python eliza.py {nombre} {resultado} {Saldo}")

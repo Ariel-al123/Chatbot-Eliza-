@@ -326,16 +326,38 @@ def generar_respuesta(entrada_usuario, saldo):
     ]
     acciones_claves = {
         "adios", "adiós",
-        "catalogo", "catálogo"
+        "catalogo", "catálogo",
         "caró", "caro",
         "colocar", "carrito",
         "comprar"
     }
 
+    palabras_clave_recomendacion = {
+        "requisitos", "recomendación", "recomendacion", "recomiendame",
+        "sugerencia", "sugerencias",
+        "buscar", "busca", "busco", "encontrar", "encuentra", "encuentro",
+        "necesito", "necesito", "quiero", "quiero",
+        "deseo", "ayuda", "ayudar", "ayúdame", "ayudame",
+    }
+
+    palabras_clave_requisitos = {
+        "nvidia", "rtx", "intel", "i5", "i7", "i9",
+        "ryzen", "amd", "ssd", "tb", "gb", "ram",
+        "ti", "gen"
+    }
+
+    sinonimos_de_PC = {
+        "pc", "computadora", "ordenador", "escritorio"
+    }
+
+    sinonimos_de_laptop = {
+        "laptop", "portátil", "portatil" ,"notebook"
+    }
+
     # Convertimos la entrada a una lista de palabras en minúsculas y las separamos.
     palabras = entrada_usuario.lower().split()
     
-    #for grupo_claves, respuestas in acciones_claves.items():
+    # 🔹 Acciones Claves
     for i in range(len(palabras)):
         palabra = palabras[i]
         if palabra in acciones_claves:
@@ -361,6 +383,46 @@ def generar_respuesta(entrada_usuario, saldo):
             elif palabra == "comprar":
                 Comprar(saldo)
                 return "Simulación de compra realizada."
+            
+
+
+    # 🔹 Buscamos en recomendaciones
+    for i in range(len(palabras)):
+        palabra = palabras[i]
+        if palabra in palabras_clave_recomendacion:
+            # Buscar requisitos en la misma entrada
+            requisitos = [p for p in palabras if p in palabras_clave_requisitos]
+            if requisitos:
+                # Determinar si el usuario busca una laptop o PC
+                tipo_dispositivo = None
+                # Any verifica si al menos un elemento cumple la condición
+                if any(p in palabras for p in sinonimos_de_laptop):
+                    tipo_dispositivo = "laptops"
+                elif any(p in palabras for p in sinonimos_de_PC):
+                    tipo_dispositivo = "pc"
+                
+                if tipo_dispositivo:
+                    # Filtrar productos que coincidan con los requisitos
+                    productos_recomendados = []
+                    for producto in catalogo_productos_todo[tipo_dispositivo]:
+                        # Solo recomienda si cumple al menos 2 requisitos
+                        coincidencias = sum(1 for req in requisitos if req in producto["palabras_clave"])
+                        if coincidencias >= 1:
+                            productos_recomendados.append(producto)
+                    # Ordenar de mayor a menor precio
+                    productos_recomendados.sort(key=lambda x: x["precio"], reverse=True)
+                    
+                    if productos_recomendados:
+                        respuesta = "Basado en tus requisitos, te recomiendo:\n"
+                        for prod in productos_recomendados:
+                            respuesta += f"- {prod['nombre']} (${prod['precio']}) con características: {', '.join(prod['caracteristicas'])}\n"
+                        return respuesta
+                    else:
+                        return "No encontré productos que coincidan exactamente con tus requisitos."
+                else:
+                    return "Por favor, especifica si buscas una laptop o una PC."
+            else:
+                return "Por favor, proporciona más detalles sobre tus requisitos."
             
 
     # 🔹 Si no es acción clave → buscamos en respuestas normales
@@ -393,7 +455,7 @@ def eliza_chat(name_user, voz, saldo):
         
             #Si no salimos, llamamos a nuestra función principal para obtener una respuesta.
     
-        respuesta = generar_respuesta(entrada_usuario)
+        respuesta = generar_respuesta(entrada_usuario, saldo)
         #f-string (cadena formateada) es una forma moderna y legible de insertar variables en texto.
         Imprimir(respuesta, voz)
         

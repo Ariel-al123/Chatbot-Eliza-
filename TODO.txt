@@ -16,12 +16,9 @@ Acciones de Menu
 |✔️| Carrito
 | | Comprar
 
+# Verificar que me recomiende los productos deseados
+# Falta guardar las recomendaciones en una variable o en un archivo de texto
 
+# Hacer que recomiende la opccion con mas matches y el mas cará
 
-
-* Hacer_Carrito(objetos) ahorito solo funciona con una opccion pero sí quitas
-        el break
-        dejas que mande mas objetos en el argumento
-    en teoria debeeria funcionar.
-
-Obtener saldo/dinero al principio en el main
+🔹 Recomendacion: añadir mas productos (en el catalogo.txt y en el codigo) 
