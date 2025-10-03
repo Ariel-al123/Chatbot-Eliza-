@@ -131,44 +131,19 @@ def Catalogo():
     return contenido
 
 def Eliminar_Carrito():
-    # Mostrar carrito y escribir el nombre del producto a eliminar
-    # Cada 1 lineas es un producto
-        # Nombre
-        # Precio
-        # Descuento
-        # Espacio
-
     Imprimir(Leer_Carrito(), 1)
-    producto_eliminar = input("Escribe el nombre del producto a eliminar: ")
-    producto_eliminar.lower()
-    
-    with open("carrito.txt", "r", encoding="utf-8") as archivo:
-        lineas = archivo.readlines().lower()
-        if producto_eliminar in lineas:
-            # Eliminar las líneas correspondientes al producto
-            with open("carrito.txt", "w", encoding="utf-8") as archivo:
-                for linea in lineas:
-                    if producto_eliminar not in linea:
-                        archivo.write(linea)
-            print(f"Producto '{producto_eliminar}' eliminado del carrito.")
+    respuesta = input("¿Desea eliminar todo el carrito? (S/n): ").strip().lower()
+    if respuesta == 's' or respuesta == '':
+        with open("carrito.txt", "w", encoding="utf-8") as archivo:
+            archivo.write("")
+        print("El carrito ha sido eliminado.")
+    else:
+        print("No se eliminó el carrito.")
 
 
     return
 
 def Comprar(saldo):
-    # Obtener saldo/dinero al principio en el main ✔️
-    # Mostrar carrito ✔️
-    # Obtener precios, descuentos ✔️
-    # Mostrar descuento cada uno y el subtotal ---------------------------------------------------> Puede que estar listo
-    # Mostrar la cantidad total a pagar ----------------------------------------------------------> Puede que estar listo
-     # Si es negativo el la cantidad preguntar si desea eliminar productos del carrito ✔️
-     # y retornar a Eliminar_Carrito() ✔️
-        # Preguntar de esta forma (S/n) ✔️
-     # sino sales de la funcion ✔️
-    # Preguntar si desea confirmar la compra (S/n) ✔️
-    # Restar el total del carrito al saldo/dinero ✔️
-    # Mostrar el saldo/dinero restante  ✔️
-
     total_a_pagar = 0.0
     productos = []
     
@@ -258,8 +233,7 @@ def Comprar(saldo):
                 return "Error: La función Eliminar_Carrito no está definida."
             except Exception as e:
                 return f"Error al eliminar productos: {str(e)}"
-        else:
-            return "Compra cancelada."
+        
     
     # Confirmar la compra
     respuesta = input("¿Desea confirmar la compra? (S/n): ").strip().lower()
@@ -273,7 +247,7 @@ def Comprar(saldo):
         try:
             with open("carrito.txt", "w", encoding="utf-8") as archivo:
                 archivo.write("")  # Vaciar el archivo
-            return ""
+            return "Compra realizada ✔️✔️✔️✔️✔️✔️✔️"
         except Exception as e:
             return f"Error al vaciar el carrito: {str(e)}"
     else:
@@ -607,7 +581,7 @@ def generar_respuesta(entrada_usuario, saldo):
             elif palabra == "comprar":                                  # Comprar
                 retorno_valor = True
                 Comprar(saldo)
-                return "Compra realizada."
+                return "Acciones Realizadas"
             
 
 
