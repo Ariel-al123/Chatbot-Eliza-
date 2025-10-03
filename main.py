@@ -129,10 +129,10 @@ def saldo():
     try:
         saldo = int(input("Por favor, ingresa tu saldo inicial (número): "))
     except ValueError:
-        saldo = 20000
+        saldo = 30000
 
     if saldo is None or saldo <= 0:
-        saldo = 20000
+        saldo = 30000
 
     return saldo
       

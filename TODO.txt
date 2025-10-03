@@ -15,9 +15,10 @@ Acciones de Menu
 |✔️| Carrito
 | | Comprar
 
-# Verificar que me recomiende los productos deseados
-# Falta guardar las recomendaciones en una variable o en un archivo de texto
+# Objetar
+    # Obtener valores de productos_recomendados.txt y dar la otra opccion
+        al recibir las palabras claves
 
-# Hacer que recomiende la opccion con mas matches y el mas cará
 
-🔹 Recomendacion: añadir mas productos (en el catalogo.txt y en el codigo) 
+# Eliminar_Carrito
+# Comprar

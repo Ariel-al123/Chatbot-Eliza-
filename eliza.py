@@ -5,8 +5,6 @@ import pyttsx3
 import os
 
 
-# crea funciones donde se guarden las carcteristicas tecnicas en un archivo
-# otro en donde se guarde la recomendacion anterior 
 
 def Menu():
     ancho = os.get_terminal_size().columns    
@@ -41,9 +39,6 @@ def Imprimir(texto, voz):
     if voz == 0:
         engine.say(texto)
     
-    # Mostrar el texto con efecto "máquina de escribir" en la misma línea
-
-    #print("")
 
     for ch in texto:
         # Imprime cada carácter sin salto de línea y fuerza el vaciado del buffer
@@ -243,7 +238,41 @@ catalogo_productos_todo = {
                 "nvidia", "4070", "intel", "i9", "ssd", "1tb", "ram", "32"
             ),
             "descuento_maximo": 0.20
+        },
+        {
+            "nombre": "laptop4",
+            "precio": 18000.00,
+            "caracteristicas": [
+                "16GB RAM", "AMD Ryzen 7 6800H", "ssd 512GB", "RTX 3050"
+            ],
+            "palabras_clave": (
+                "16", "ram", "amd", "ryzen", "7", "6800h", "ssd", "512", "rtx", "3050"
+            ),
+            "descuento_maximo": 0.17
+        },
+        {
+            "nombre": "laptop5",
+            "precio": 9500.00,
+            "caracteristicas": [
+                "8GB RAM", "Intel i5 11ª Gen", "ssd 256GB"
+            ],
+            "palabras_clave": (
+                "8gb", "intel", "i5", "11", "ssd", "256", "ram"
+            ),
+            "descuento_maximo": 0.08
+        },
+        {
+            "nombre": "laptop6",
+            "precio": 30000.00,
+            "caracteristicas": [
+                "32GB RAM", "Intel i9 14ª Gen", "SSD 2TB", "RTX 4080"
+            ],
+            "palabras_clave": (
+                "32", "ram", "intel", "i9", "14", "ssd", "2tb", "rtx", "4080"
+            ),
+            "descuento_maximo": 0.23
         }
+
     ],
 
     "pc": [
@@ -282,6 +311,39 @@ catalogo_productos_todo = {
                "intel", "4090", "nvidia", "ssd", "2tb", "ram", "64", "rtx", "pc"
             ),
             "descuento_maximo": 0.25
+        },
+        {
+            "nombre": "pc4",
+            "precio": 10500.00,
+            "caracteristicas": [
+                "16GB RAM", "AMD Ryzen 5 7600", "SSD 500GB"
+            ],
+            "palabras_clave": (
+                "16", "ram", "amd", "ryzen", "5", "7600", "ssd", "500"
+            ),
+            "descuento_maximo": 0.12
+        },
+        {
+            "nombre": "pc5",
+            "precio": 28000.00,
+            "caracteristicas": [
+                "32GB RAM", "Intel i7 14ª Gen", "SSD 1TB", "RTX 4080"
+            ],
+            "palabras_clave": (
+                "32", "ram", "intel", "i7", "14", "ssd", "1tb", "rtx", "4080"
+            ),
+            "descuento_maximo": 0.22
+        },
+        {
+            "nombre": "pc6",
+            "precio": 6500.00,
+            "caracteristicas": [
+                "8GB RAM", "Intel i3 12ª Gen", "SSD 240GB"
+            ],
+            "palabras_clave": (
+                "8gb", "intel", "i3", "12", "ssd", "240"
+            ),
+            "descuento_maximo": 0.05
         }
     ]
 }
@@ -315,7 +377,6 @@ cambio_pronombres = {
 
 def generar_respuesta(entrada_usuario, saldo):
 
-    #Re hacer toda la funcion
     palabras_clave = ["hola", "buenas", "hey", "qué tal",
                         "nombre", "me llamo", "soy",
                         "siento", "estoy", "me siento",
@@ -419,10 +480,15 @@ def generar_respuesta(entrada_usuario, saldo):
                     productos_recomendados.sort(key=lambda x: x["precio"], reverse=True)
                     
                     if productos_recomendados:
-                        retorno_valor = True
+                        # Guardar todos los productos recomendados en un archivo
+                        with open("productos_recomendados.txt", "w", encoding="utf-8") as f:
+                            for prod in productos_recomendados:
+                                f.write(f"{prod['nombre']}\n(${prod['precio']})\n\n")
+                        # Mostrar solo el primer producto en pantalla
+                        prod = productos_recomendados[0]
                         respuesta = "Basado en tus requisitos, te recomiendo:\n"
-                        for prod in productos_recomendados:
-                            respuesta += f"- {prod['nombre']} (${prod['precio']}) con características: {', '.join(prod['caracteristicas'])}\n"
+                        respuesta += f"- {prod['nombre']} (${prod['precio']}) con características: {', '.join(prod['caracteristicas'])}\n"
+                        retorno_valor = True
                         return respuesta
                     else:
                         retorno_valor = True
@@ -471,7 +537,10 @@ def eliza_chat(name_user, voz, saldo):
     
         respuesta = generar_respuesta(entrada_usuario, saldo)
         #f-string (cadena formateada) es una forma moderna y legible de insertar variables en texto.
-        Imprimir(respuesta, voz)
+        if respuesta is None:
+            Imprimir(random.choice(respuestas_genericas), voz)
+        else:
+            Imprimir(respuesta, voz)
         
         # INICIO DE LA EJECUCIÓN -
         # Para probar el chatbot en tu libreta, simplemente descomenta y ejecuta la siguiente línea.
